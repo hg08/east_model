@@ -2,4 +2,4 @@
 
 N=128
 S=3000
-sbatch job_mc.sh 2.0 $N $S
+sbatch job_mc.sh 5.0 $N $S
