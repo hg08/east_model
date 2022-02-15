@@ -58,7 +58,7 @@ def plot_mean_corr(corr,beta=beta,N=N,steps=tot_steps):
     plt.ylabel(r"$C(t)$")
     ax.set_title("N={:d}; beta={:3.1f}".format(N,beta))
     #
-    plt.savefig("../imag/Mean_Corr_N{:d}_beta{:4.2f}_steps{:d}_s.pdf".format(N,beta,steps),format='pdf')
+    plt.savefig("../imag/Mean_corr_N{:d}_beta{:4.2f}_steps{:d}.pdf".format(N,beta,steps),format='pdf')
 
 # ====
 # Main
@@ -77,15 +77,8 @@ if __name__=='__main__':
     
     # Plot
     #skiprows = skipped_steps * N
-    beta1 = 3.00
-    beta2 = 4.50
     skipped_steps = int(tot_steps * 0.2)
     tot_steps2 = tot_steps - skipped_steps
-    #for k in range(16):
-    #    for init in range(k*num_cores, (k+1)*num_cores):
-    #        corr = np.load('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta,init,tot_steps2))     
-    #        print("shape{}:".format(corr.shape))
-    #        plot_corr(corr,init,beta=beta,N=N,steps=tot_steps2)
 
     #mean_corr = np.zeros(tot_steps-skipped_steps)
     mean_corr = 0 
@@ -97,12 +90,8 @@ if __name__=='__main__':
     np.save('../data/mean_corr_N{:d}_beta{:4.2f}_step{:d}.npy'.format(N,beta,tot_steps2),mean_corr)
     ## Plot
     corr = np.load('../data/mean_corr_N{:d}_beta{:4.2f}_step{:d}.npy'.format(N,beta,tot_steps2))     
-    corr1 = np.load('../data/mean_corr_N{:d}_beta{:4.2f}_step{:d}.npy'.format(N,beta1,tot_steps2))     
-    corr2 = np.load('../data/mean_corr_N{:d}_beta{:4.2f}_step{:d}.npy'.format(N,beta2,tot_steps2))     
     #skiprows = skipped_steps * N
     plot_mean_corr(corr,beta=beta,N=N,steps=tot_steps2)
-    plot_mean_corr(corr1,beta=beta1,N=N,steps=tot_steps2)
-    plot_mean_corr(corr2,beta=beta2,N=N,steps=tot_steps2)
     #Main MC simulations DONE
     print("The computer has " + str(num_cores) + " cores.")
     print("AUTO CORRELATIONS DONE!")

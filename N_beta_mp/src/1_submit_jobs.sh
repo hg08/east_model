@@ -1,5 +1,5 @@
 #rm -rf ../data/*
 
-N=64
-S=2000
-sbatch job_mc.sh 0.5 $N $S
+N=128
+S=3000
+sbatch job_mc.sh 2.0 $N $S

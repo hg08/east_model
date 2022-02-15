@@ -16,7 +16,7 @@ from scipy.special import comb
 
 def sample_step_list(step_index=30):
     # The parameter ratio is used for generating the sampling time point.
-    qq = 5.0
+    qq = 2.0
     pp = qq + 1
     ratio= pp/qq
     # general ratio

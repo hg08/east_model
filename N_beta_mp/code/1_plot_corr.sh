@@ -1,5 +1,5 @@
 #!/bin/bash
 
-N=64
-S=2000
-python3 main_plot_corr.py -B 4.5 -N $N -S $S
+N=128
+S=3000
+python3 main_plot_corr.py -B 2.0 -N $N -S $S

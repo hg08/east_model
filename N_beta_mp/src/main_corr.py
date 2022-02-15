@@ -99,18 +99,18 @@ def autocorr_3(init,beta=beta,N=N,tot_steps=tot_steps,skipped_steps=skipped_step
        4. TODO: I have to create a method to know when the system is in equlibrium.
     """
     tot_steps2 = tot_steps-skipped_steps
-    #corr = np.zeros(2*(tot_steps2 * N)-1)
     corr = 0 
     norm_arr = 0.0
     skiprows = skipped_steps * N
     fname = '../data/sigma_N{:d}_beta{:4.2f}_init{:d}_step{:d}.dat'.format(N,beta,init,tot_steps)
     df = np.loadtxt(fname, skiprows=skiprows, encoding='bytes')
+    df_bar = df.mean()
     for j in range(N):
         # Load data from a text file.
         # Read the j-th column as an array
         # Calculate the self-auto correlation
         h = df[:,j]
-        corr = corr +  my_autocorr(h)
+        corr = corr +  my_autocorr_simple(h,df_bar)
     ave_corr = corr/N # Average over nodes
     #print("ave_corr:{}".format(ave_corr))
     #Print corr
@@ -162,6 +162,47 @@ def my_autocorr(df):
         #print("print df values:")
         #print(df[:-100])
         acf.append(autocorr(df[:], lag=i)) #calling autocorr function for each lag 'i'
+    return np.array(acf)
+
+def my_autocorr_simple(df,df_bar):
+    ''' Ref: https://towardsdatascience.com/understanding-autocorrelation-in-time-series-analysis-322ad52f2199
+    Returns autocorrelation coefficient for lags [nlags, 0]
+    df: dataframe
+        Input dataframe of time series
+    nlags: int
+           maximum number of lags, default 2
+    Returns
+    array: autocorrelation coefficients for lags [nlags, 0]
+    # y_bar = mean of the time series y. We use mean of df (df_bar) to represent y_bar
+    '''
+    def autocorr(y, df_bar, lag=2):
+        '''
+        Calculates autocorrelation coefficient for single lag value
+        y: array
+           Input time series array
+        lag: int, default: 2 
+             'kth' lag value
+        Returns
+        int: autocorrelation coefficient 
+        '''
+        y = np.array(y).copy()
+        y_bar = df_bar
+        denominator = sum((y - y_bar) ** 2) #sum of squared differences between y(t) and y_bar
+        eps = 0.000001
+        if denominator < eps: denominator = eps
+        numerator_p1 = y[lag:] - y_bar #y(t)-y_bar: difference between time series (from 'lag' till the end) and y_bar
+        numerator_p2 = y[:-lag] - y_bar #y(t-k)-y_bar: difference between time series (from the start till lag) and y_bar
+        numerator = sum(numerator_p1 * numerator_p2) #sum of y(t)-y_bar and y(t-k)-y_bar
+        return (numerator / denominator)
+    steps2 = tot_steps - int(0.2*tot_steps)
+    print("steps2:{}".format(steps2))
+    max_index = calc_max_index(N,steps2)                               
+    step_list_v2 = sample_step_list(max_index)  
+    acf = [1] #initializing list with autocorrelation coefficient for lag k=0 which is always 1
+    for i in step_list_v2: 
+        #print("print df values:")
+        #print(df[:-100])
+        acf.append(autocorr(df[:],df_bar, lag=i)) #calling autocorr function for each lag 'i'
     return np.array(acf)
 
 def calc_max_index(N,steps):
