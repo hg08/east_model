@@ -34,19 +34,6 @@ start_t = datetime.datetime.now()
 #=========
 #Functions
 #=========
-def line2intlist(line):
-    line_split=line.strip().split(' ')
-    res_list = []
-    for x in line_split:
-        res_list.append(int(x))
-    return res_list
-def line2floatlist(line):
-    line_split=line.strip().split(' ')
-    res_list = []
-    for x in line_split:
-        res_list.append(float(x))
-    return res_list
-
 class Spin_chain_east:
     def __init__(self,num_nodes):
         self.N = int(num_nodes) # fix it when I run the program.
@@ -120,70 +107,8 @@ if __name__=='__main__':
     #================================================ 
     #Use Multiprocessing to run MC on multiple cores
     #================================================ 
-    param_tuple = [(N,tot_steps,beta,0),
-                   (N,tot_steps,beta,1),
-                   (N,tot_steps,beta,2),
-                   (N,tot_steps,beta,3),
-                   (N,tot_steps,beta,4),
-                   (N,tot_steps,beta,5),
-                   (N,tot_steps,beta,6),
-                   (N,tot_steps,beta,7),
-                   (N,tot_steps,beta,8),
-                   (N,tot_steps,beta,9),
-                   (N,tot_steps,beta,10),
-                   (N,tot_steps,beta,11),
-                   (N,tot_steps,beta,12),
-                   (N,tot_steps,beta,13),
-                   (N,tot_steps,beta,14),
-                   (N,tot_steps,beta,15),
-                   (N,tot_steps,beta,16),
-                   (N,tot_steps,beta,17),
-                   (N,tot_steps,beta,18),
-                   (N,tot_steps,beta,19),
-                   (N,tot_steps,beta,20),
-                   (N,tot_steps,beta,21),
-                   (N,tot_steps,beta,22),
-                   (N,tot_steps,beta,23),
-                   (N,tot_steps,beta,24),
-                   (N,tot_steps,beta,25),
-                   (N,tot_steps,beta,26),
-                   (N,tot_steps,beta,27),
-                   (N,tot_steps,beta,28),
-                   (N,tot_steps,beta,29),
-                   (N,tot_steps,beta,30),
-                   (N,tot_steps,beta,31),
-                   (N,tot_steps,beta,32),
-                   (N,tot_steps,beta,33),
-                   (N,tot_steps,beta,34),
-                   (N,tot_steps,beta,35),
-                   (N,tot_steps,beta,36),
-                   (N,tot_steps,beta,37),
-                   (N,tot_steps,beta,38),
-                   (N,tot_steps,beta,39),
-                   (N,tot_steps,beta,40),
-                   (N,tot_steps,beta,41),
-                   (N,tot_steps,beta,42),
-                   (N,tot_steps,beta,43),
-                   (N,tot_steps,beta,44),
-                   (N,tot_steps,beta,45),
-                   (N,tot_steps,beta,46),
-                   (N,tot_steps,beta,47),
-                   (N,tot_steps,beta,48),
-                   (N,tot_steps,beta,49),
-                   (N,tot_steps,beta,50),
-                   (N,tot_steps,beta,51),
-                   (N,tot_steps,beta,52),
-                   (N,tot_steps,beta,53),
-                   (N,tot_steps,beta,54),
-                   (N,tot_steps,beta,55),
-                   (N,tot_steps,beta,56),
-                   (N,tot_steps,beta,57),
-                   (N,tot_steps,beta,58),
-                   (N,tot_steps,beta,59),
-                   (N,tot_steps,beta,60),
-                   (N,tot_steps,beta,61),
-                   (N,tot_steps,beta,62),
-                   (N,tot_steps,beta,63)]
+    param_tuple = [(N,tot_steps,beta,i) for i in range(num_cores)]
+
     #MC simulations for different init configurations
     for k in range(num_cores):
         print("Now start process ({}).".format(k))

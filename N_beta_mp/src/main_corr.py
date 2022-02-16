@@ -56,40 +56,13 @@ def ave_population(init,beta=beta,N=N,tot_steps=tot_steps,skiprows=skipped_steps
     h = np.loadtxt(fname, dtype='float32', comments='#', delimiter=" ", converters=None, skiprows=skiprows, usecols=np.arange(0,N), ndmin=1, encoding='bytes')
     # ndmin: The returned array will have at least ndmin dimensions. Otherwise mono-dimensional axes will be squeezed. Legal values: 0 (default), 1 or 2.
     # Calculate the self-auto correlation
-    #ave5 = ave5 + np.sum(h[:-5*N*s])
-    #ave4 = ave4 + np.sum(h[:-4*N*s])
-    #ave3 = ave3 + np.sum(h[:-3*N*s])
-    #ave2 = ave2 + np.sum(h[:-2*N*s])
-    #ave1 = ave1 + np.sum(h[:-N*s])
     ave = np.sum(h)
     norm = N*(tot_steps2)*N
-    #norm1 = N*(tot_steps2-s)*N
-    #norm2 = N*(tot_steps2-2*s)*N
-    #norm3 = N*(tot_steps2-3*s)*N
-    #norm4 = N*(tot_steps2-4*s)*N
-    #norm5 = N*(tot_steps2-5*s)*N
-    #ave5 = ave5/norm5
-    #ave4 = ave4/norm4
-    #ave3 = ave3/norm3
-    #ave2 = ave2/norm2
-    #ave1 = ave1/norm1
     ave = ave/norm
-    #print("ave5={}".format(ave5))
-    #print("ave4={}".format(ave4))
-    #print("ave3={}".format(ave3))
-    #print("ave2={}".format(ave2))
-    #print("ave1={}".format(ave1))
-    #print("ave={}".format(ave))
     f_log_corr = open('../data/ave_population_N{:d}_beta{:4.2f}_init{:d}_step{:d}.dat'.format(N,beta,init,tot_steps), "a+") 
     f_log_corr.write("# The averaged population operator over all nodes and for an initial configuration. (There are N nodes, num_cores initial configurations.)."+ "\n") 
-    #f_log_corr.write("{:8.7f}\n".format(ave5))
-    #f_log_corr.write("{:8.7f}\n".format(ave4))
-    #f_log_corr.write("{:8.7f}\n".format(ave3))
-    #f_log_corr.write("{:8.7f}\n".format(ave2))
-    #f_log_corr.write("{:8.7f}\n".format(ave1))
     f_log_corr.write("{:8.7f}\n".format(ave))
     f_log_corr.close()
-    #return ave5, ave4, ave3, ave2, ave1, ave
     return ave
 
 def autocorr_3(init,beta=beta,N=N,tot_steps=tot_steps,skipped_steps=skipped_steps):
@@ -117,7 +90,6 @@ def autocorr_3(init,beta=beta,N=N,tot_steps=tot_steps,skipped_steps=skipped_step
     np.save('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta,init,tot_steps2), ave_corr)
     f_log_corr = open('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.dat'.format(N,beta,init,tot_steps2), "a+") 
     f_log_corr.write("# The averaged correlation over all nodes (There are N nodes totally)."+ "\n") 
-    #for i in range(tot_steps2*N):
     max_index = calc_max_index(N,tot_steps2)                               
     step_list_v2 = sample_step_list(max_index)  
     for i, term  in enumerate(step_list_v2):
@@ -213,25 +185,10 @@ def calc_max_index(N,steps):
            pass
         else:
            return i-1
-def line2intlist(line):
-    line_split=line.strip().split(' ')
-    res_list = []
-    for x in line_split:
-        res_list.append(int(x))
-    return res_list
-def line2floatlist(line):
-    line_split=line.strip().split(' ')
-    res_list = []
-    for x in line_split:
-        res_list.append(float(x))
-    return res_list
 
 #======
 # tools
 #======
-def int2bin(n, count=24):
-    """returns the binary of integer n, using count number of digits"""
-    return "".join([str((n >> y) & 1) for y in range(count-1, -1, -1)])
 def zero2minus1(arr):
     """Convert all 0 in arr to -1, while keep 1 not changed."""
     return (arr-1/2)*2.0
@@ -266,9 +223,6 @@ if __name__=='__main__':
                         help="the number of total steps.")
     args = parser.parse_args()
     beta,N,tot_steps = args.B,args.N,args.S
-    beta1 = 3.00
-    beta2 = 4.50
-    beta_list = [beta, beta1, beta2]
     skipped_steps = int(tot_steps * 0.2)
     #================================================ 
     #Use Multiprocessing to run MC on multiple cores
@@ -316,20 +270,18 @@ if __name__=='__main__':
     tot_steps2 = tot_steps-skipped_steps
 
     # Plot
-    for beta_x in beta_list:
-        for init in range(num_cores):
-            corr = np.load('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta_x,init,tot_steps2))
-            mean_corr = mean_corr + corr
-        mean_corr = mean_corr / num_cores
-        np.save('../data/mean_corr_N{:d}_beta{:4.2f}_step{:d}.npy'.format(N,beta_x,tot_steps2),mean_corr)
+    for init in range(num_cores):
+        corr = np.load('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta,init,tot_steps2))
+        mean_corr = mean_corr + corr
+    mean_corr = mean_corr / num_cores
+    np.save('../data/mean_corr_N{:d}_beta{:4.2f}_step{:d}.npy'.format(N,beta,tot_steps2),mean_corr)
     
     max_index = calc_max_index(N,tot_steps2)                               
     step_list_v2 = sample_step_list(max_index)  
-    for beta_x in beta_list:
-        for init in range(num_cores):
-            #print("corr2")
-            corr = np.load('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta_x,init,tot_steps2))     
-            plot_corr(corr,init,step_list_v2,beta=beta,N=N)
+    for init in range(num_cores):
+        #print("corr2")
+        corr = np.load('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta,init,tot_steps2))     
+        plot_corr(corr,init,step_list_v2,beta=beta,N=N)
 
     #Main MC simulations DONE
     print("The computer has " + str(num_cores) + " cores.")
