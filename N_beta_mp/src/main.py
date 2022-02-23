@@ -72,22 +72,18 @@ class Spin_chain_east:
                         if prob < np.exp(-beta): 
                             self.coord[i] = 1
                         self.record_coord(f_log_sigma)
+
     def record_coord(self, f_log_sigma):
         string_list = ["%i" % value for value in self.coord]
         formatted_string = " ".join(string_list)
         f_log_sigma.write(formatted_string + "\n") # https://www.kite.com/python/answers/how-to-print-a-list-using-a-custom-format-in-python
 
 def mc(N=N,tot_steps=tot_steps,beta=beta,init=init):
-    # Open log
-    f_log_sigma = open('../data/sigma_N{:d}_beta{:4.2f}_init{:d}_step{:d}.dat'.format(N,beta,init,tot_steps), "a+") 
-    # Initilize an instance of a spin chain.
-    r = Spin_chain_east(N)
+    f_log_sigma = open('../data/sigma_N{:d}_beta{:4.2f}_init{:d}_step{:d}.dat'.format(N,beta,init,tot_steps), "a+")   # Open log
+    r = Spin_chain_east(N) # Initilize an instance of a spin chain.
     for i in range(tot_steps):
-        # Print the new coord as a record in f_log_sigma
-        r.update(beta,f_log_sigma)
-
-    # Close log
-    f_log_sigma.close()
+        r.update(beta,f_log_sigma) # Print the new coord as a record in f_log_sigma
+    f_log_sigma.close() # Close log
          
 # ======
 # Main

@@ -12,7 +12,6 @@ from scipy.stats import norm
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-#from time import sleep
 
 import multiprocessing as mp
 from itertools import combinations 
@@ -21,6 +20,7 @@ from random import randrange
 from scipy.special import comb
 import scipy as sp
 from utilities_east_model import sample_step_list
+
 #===========
 # Parameters
 #===========
@@ -33,6 +33,7 @@ num_cores = int(mp.cpu_count())
 start_t = datetime.datetime.now()
 skipped_steps = 10
 num_steps = 0
+
 #=========
 #Functions
 #=========
@@ -131,8 +132,6 @@ def my_autocorr(df):
     step_list_v2 = sample_step_list(max_index)  
     acf = [1] #initializing list with autocorrelation coefficient for lag k=0 which is always 1
     for i in step_list_v2: 
-        #print("print df values:")
-        #print(df[:-100])
         acf.append(autocorr(df[:], lag=i)) #calling autocorr function for each lag 'i'
     return np.array(acf)
 
@@ -172,13 +171,10 @@ def my_autocorr_simple(df,df_bar):
     step_list_v2 = sample_step_list(max_index)  
     acf = [1] #initializing list with autocorrelation coefficient for lag k=0 which is always 1
     for i in step_list_v2: 
-        #print("print df values:")
-        #print(df[:-100])
         acf.append(autocorr(df[:],df_bar, lag=i)) #calling autocorr function for each lag 'i'
     return np.array(acf)
 
 def calc_max_index(N,steps):
-    # To obtain 
     for i in range(1,1200):
         max_step = sample_step_list(i)[-1]
         if max_step < steps * N:
