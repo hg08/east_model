@@ -1,6 +1,7 @@
 \documentclass[8pt]{beamer}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par} % Without prefix "Figure"
 \usepackage{graphics}
-\title{Auto-correlations of spins in East Model}
+\title{Auto-correlations of spins in 1D East Model}
 \author{Gang Huang}
 \usetheme{Frankfurt}
 \definecolor{mygreen}{rgb}{.3,.4,.12}
@@ -18,9 +19,11 @@
 \section{1D East Model}
 \begin{frame}
 	\frametitle{East Model is an example of kinetically constrained Ising model.} 
-	East model is a 1-D system of spins on lattice. For site $i$, $n_i =0$ or 1, with PBC. 
+	East model is a 1-D system of spins on lattice. For site $i$, $n_i =0$ or 1. 	No static interactions between spins. (\textbf{Palmer 1984; Jaeckle, Eisinger 1991; Eisinger, Jaeckle 1993; Faggionato, Martinelli, Roberto, and Toninelli 2012 })
 	
-	No static interactions between spins. (\textbf{Jaeckle, Eisinger 1991; Eisinger, Jaeckle 1993; Faggionato, Martinelli, Roberto, and Toninelli 2012 })
+	Boundary condition:  PBC (\textbf{Sollich,2003}). 
+	
+
 	
 	A given spin may only flip if the neighboring spin to the right is up, with an acceptance ratio $A$,
      \begin{alignat}{3}
@@ -35,13 +38,11 @@
  East model shows glassy dynamics. (\textbf{Pitts and Andersen, 2001})
  %ie., its relaxation properties are similar to those of glass forming liquids and because some of them undergo ergodic–nonergodic transitions. 
  
- Define auto correlation function
+ Auto-correlation function
       \begin{alignat}{3}
-      C(t) = \frac{\langle\delta n_i(t)\delta n_i (0)\rangle}{\langle \delta n_i(0)^2 \rangle}.
+      C(t) = \frac{\langle\delta n_i(t)\delta n_i (0)\rangle}{\langle \delta n_i(0)^2 \rangle} = \frac{\langle n_i(t)n_i(0)\rangle - c^2}{c-c^2} = \frac{\langle\delta n_i(t)\delta n_i (0)\rangle}{c(1-c)}  .
  \end{alignat}
-$\langle \cdots \rangle$: Average for the equilibrium state,
-
-$n_i$: occupation number of site $i$.
+$\langle \cdots \rangle$: Average for the equilibrium state; $n_i$: occupation number of site $i$; $c = \langle n_i \rangle$; $\langle n_i(t)^2 \rangle = \langle n_i(t)\rangle$.
 \end{frame}
 
 \begin{frame}
@@ -51,19 +52,83 @@ $n_i$: occupation number of site $i$.
 		c= \frac{e^{-\beta}}{1+ e^{-\beta}} \Rightarrow \beta = \ln \frac{c}{1-c} \text{ for } c < 1/2.
 	\end{alignat}
 	(\textbf{Wu Jianlan, 2004, JPC})	
+	\begin{table}[htbp]
+		\centering
+				\caption{\label{tab:table_lino3} Theoretical and MC simulation (total steps: 3000) values of and $c$ for given $\beta$'s.}
+		\begin{tabular}{cccccc}
+			$\beta$ & $c$ (Theo.) & $c$($N=32$) & $c$($N=64$) & $c$($N=128$) &$c$($N=256$) \\
+			\hline
+			0.08 & 0.4800  & & 0.4797 & 0.4800 & 0.4803 \\
+			0.40 & 0.4013 & & 0.4027 & 0.4006 & 0.4012 \\
+			0.85 & 0.2994 & & 0.2998 & 0.2992  & 0.3005 \\
+			1.39 & 0.1994 & & 0.2046 & 0.2034 & 0.2033 \\
+			2.00 & 0.1192 & & \textcolor{red}{0.1492} & \textcolor{red}{0.1576} & \textcolor{red}{0.1539}\\
+			2.20 & 0.0997 & &  \textcolor{red}{0.1450} & \textcolor{red}{0.1487} & \textcolor{red}{0.1520}
+		\end{tabular}
+	\end{table}
+	Q: Why is the values of $c$ obtained by the Monte Carlo simulation too large at high $\beta$? 
+	
+	A: Because the system does not reach equilibrium! 
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{To make sure we have calculated the $c(t)$ of equilibrated chain}
+	Q2: How to make sure the system is in equilibrium?  
+	
+	A2: We set 
 	\begin{alignat}{3}
-		c = 0.10 \rightleftarrows \beta = 2.20 \nonumber\\
-		c = 0.20 \rightleftarrows \beta = 1.39 \nonumber\\
-		c = 0.30 \rightleftarrows \beta = 0.84 \nonumber\\
-		c = 0.48 \rightleftarrows \beta =  0.05 
+	\text{total steps} = \text{INT}[N_\text{step} (1+\beta)^2], 
 	\end{alignat}
+where $N_\text{step}=3000$.
+
+	 Then, for higher $\beta$, the total number of MC steps will be larger! The data for analyzing: the last $N_\text{step}\cdot \alpha = 3000\times 0.8 = 2400$ steps.
+\begin{table}[htbp]
+	\centering
+			\caption{\label{tab:table_lino3} Theoretical and MC simulation (total steps: 3000) values of and $c$ for given $\beta$'s.}
+	\begin{tabular}{cccccc}
+		$\beta$ & $c$ (Theo.) & $c$($N=32$) & $c$($N=64$) & $c$($N=128$) &$c$($N=256$) \\
+		\hline
+		0.08 & 0.4800  & & 0.4797 &  &  \\
+		0.40 & 0.4013 & & 0.4027 &  &  \\
+		0.85 & 0.2994 & & 0.2998 &   &  \\
+		1.39 & 0.1994 & & 0.2046 &  &  \\
+		2.00 & 0.1192 & & \textcolor{blue}{0.0959} &  & \\
+		2.20 & 0.0997 & & \textcolor{blue}{0.0803} & & 
+	\end{tabular}
+\end{table}
+For high $\beta$, the fluctuation of $c$ is large! As $\beta$ increase, we need longer trajectory to make sure the $c$ from simulated data reaches the theoretical value. 3000 is too small for $\beta=2.2$.
+\end{frame}
+
+\begin{frame}
+	\frametitle{To make sure we have calculated the $c(t)$ of equilibrated chain(2)}
+	Q3: Besides using long trajectory, how to know that the system is in equilibrium?  
+	
+	A3: We need longer trajectory for analyzing data.  3000 $\to$  10000.
+	
+	\begin{table}[htbp]
+		\centering
+		\caption{\label{tab:table_lino3} Theoretical and MC simulation (total steps: 10000) values of and $c$ for given $\beta$'s.}
+		\begin{tabular}{cccccc}
+			$\beta$ & $c$ (Theo.) & $c$($N=32$) & $c$($N=64$) & $c$($N=128$) \\
+			\hline
+			0.08 & 0.4800  & 0.4798 &  0.4801 & 0.4799  \\
+			0.40 & 0.4013 & 0.4014 &   0.4009 & 0.4012  \\
+			0.85 & 0.2994 & 0.2999 &  0.2999 & 0.2998 \\
+			1.39 & 0.1994 & 0.1983 &  0.2006 & 0.1993  \\
+			2.00 & 0.1192 & 0.1117 & 0.1194 & 0.1214 \\
+			2.20 & 0.0997 & 0.1074 & 0.0981 & 0.1030 
+		\end{tabular}
+	\end{table}
+		\textbf{Conclusion}:  The total steps (10000) is large enough for high $\beta$ (eg.,$\beta=2.2$)! 
 \end{frame}
 
 \begin{frame}
 	\frametitle{MC Move Scheme for 1-dimensional East model}
 	\begin{itemize}
-        \item All sites simultaneously update in ONE step. Each step, record the configuration. (21-12-20)
-        \item N randomly chosen sites update one by one. Every N updates, record the configuration. (22-1-10, \textbf{current version})
+        \item $N$ randomly chosen sites update one by one. Each update is labeled by index (time) $i$, $i=1,2,\cdots$. At each step $i$, we record the configuration.  
+        %\item The time step $t$ in the correlation function $C(t)$ is the index of update $i$ divided by size $N$ of the 1D chain: $t = i/N$, where  $i = 1,2,\cdots,(N \times \text{totsteps}\times \alpha)$.
+        \item We only calculated the correlation function at the time ($i$) in the set $\{ 1, 2, 3, 5, 7, 11, 17, 25, 38,\cdots\}$, $\text{INT}((3/2)^n), \text{for } n= 0,1,2,3,\cdots$. Therefore, the data of $C(t)$: $C(0), C(1), C(2), C(3), C(5),C(7),\cdots.$ 
     \end{itemize}
 \end{frame}
 
@@ -72,9 +137,30 @@ $n_i$: occupation number of site $i$.
 	\frametitle{$C(t)$ for 1-dimensional East model}
 	\begin{figure}
 		\centering
-		\includegraphics [width=1.1\textwidth] {./imag/corr_of_c_east_model.pdf}
+		\includegraphics [width=1.1\textwidth] {./imag/corr_of_c_east_model_N128_N64.pdf}
 		\setlength{\abovecaptionskip}{0pt}
-		\caption{$C(t)$ from MC simulations  and from \textbf{Eisinger and Jaeckle (1993)}. PROBLEM: to speed up the program.}
+		\caption{$C(t)$ from MC simulations of finite 1D East model (PBC) and from \textbf{Eisinger and Jaeckle (1993)} (semi-infinite chain). }
+		% PROBLEM: to speed up the program.
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{$C(t)$ for 1-dimensional East model}
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.8\textwidth] {./imag/beta_dependence_of_corr_N32_and_N64_step10000_loglog.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{Compare $C(t)$ of $N=32$ and 64 for different concentrations $c$. From MC simulations of finite 1D East model (PBC).}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{$C(t)$ for 1-dimensional East model}
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.8\textwidth] {./imag/beta_dependence_of_corr_N128_and_N64_step10000_loglog.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{Compare $C(t)$ of $N=64$ and 128 for different concentrations $c$. From MC simulations of finite 1D East model (PBC).}
 	\end{figure}
 \end{frame}
 
@@ -90,19 +176,53 @@ $n_i$: occupation number of site $i$.
 
 \begin{frame}
 	\frametitle{{\textcolor{blue}{$\beta$-dependence}} of $C(t)$ (semi-log plot)}
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.9\textwidth] {./imag/beta_dependence_of_corr_N32_step10000.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{{\textcolor{blue}{$t$-dependence}} and {\textcolor{blue}{$\beta$-dependence}} of $C(t)$}
+	\end{figure}
+\end{frame}
+\begin{frame}
+	\frametitle{{\textcolor{blue}{$\beta$-dependence}} of $C(t)$ (semi-log plot)}
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.9\textwidth] {./imag/beta_dependence_of_corr_N64_step10000.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{{\textcolor{blue}{$t$-dependence}} and {\textcolor{blue}{$\beta$-dependence}} of $C(t)$}
+	\end{figure}
+\end{frame}
+\begin{frame}
+	\frametitle{{\textcolor{blue}{$\beta$-dependence}} of $C(t)$ (semi-log plot)}
  \begin{figure}
 	\centering
-	\includegraphics [width=0.9\textwidth] {./imag/beta_dependence_of_corr_N128_step3000.pdf}
+	\includegraphics [width=0.6\textwidth] {./imag/beta_dependence_of_corr_N128_step10000_p2p4.pdf}
 	\setlength{\abovecaptionskip}{0pt}
-	\caption{{\textcolor{blue}{$t$-dependence}} and {\textcolor{blue}{$\beta$-dependence}} of $C(t)$}
+	\caption{$C(t)$ for $c=0.2$({\textcolor{green}{green}}) and $c=0.4$({\textcolor{blue}{blue}}) in our simulations  are agree with the simulation results in \textbf{Pitts, Young and Andersen,2000}.}
 \end{figure}
+$\rightarrow$ For $c < 0.5$, our MC simulations are correct! 
+
+Question: Why we can not generate $c >0.5$ in the MC simulations?
+\end{frame}
+
+\begin{frame}
+	\frametitle{{\textcolor{blue}{$\beta$-dependence}} of $C(t)$ (semi-log plot): Test 1}
+	\textbf{J-E (EMA) theory provides an excellent fit to the data at higher} $c$ and \textbf{fits short time data well at lower} $c$'s, but ultimately fails because the EMA correlator dost not decay to 0 for $c<0.5$
+	
+	Kawasaki (MCA) theory is less accurate at all $c$'s, predicting relaxation that is \textbf{too rapid at short times} at all $c$'s and then predicting \textbf{a failure to relax to 0 at long times for low $c$'s}. (\textbf{Pitts, Young, and Andersen,2000} )     
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.9\textwidth] {./imag/beta_dependence_of_corr_N128_step10000_b.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{ (Left) $C(t)$ for different $c$'s in our simulations and (Right) the simulation results in \textbf{Pitts, Young and Andersen,2000}, \textbf{EJ} (solid), and \textbf{Kawasaki} (dotted). }
+	\end{figure}
 \end{frame}
 
 \begin{frame}
 	\frametitle{{\textcolor{blue}{$\beta$-dependence}} of relaxation time $\tau$}
 	\begin{figure}
 		\centering
-		\includegraphics [width=0.7\textwidth] {./imag/relaxation_time_of_corr_on_beta_N128_step3000.pdf}
+		\includegraphics [width=0.7\textwidth] {./imag/relaxation_time_of_corr_on_beta_N128_step10000.pdf}
 		\setlength{\abovecaptionskip}{0pt}
 		\caption{{\textcolor{blue}{$\beta$-dependence}} of $C(t)$. $N=128$.}
 	\end{figure}
@@ -113,34 +233,52 @@ $n_i$: occupation number of site $i$.
 	\begin{figure}
 		\centering
 		\includegraphics [width=0.7\textwidth]
-		{./imag/relaxation_time_of_corr_on_c_N128_step3000.pdf}
+		{./imag/relaxation_time_of_corr_on_c_N128_step10000.pdf}
 		\setlength{\abovecaptionskip}{0pt}
 		\caption{{\textcolor{blue}{$c$-dependence}} of $C(t)$. $N=128$.}
 	\end{figure}
 \end{frame}
 
-\section{Size effects}
-\begin{frame}
-	\frametitle{{\textcolor{blue}{$c$-dependence}} of $C(t)$.}
-	\begin{figure}
-		\centering
-		\includegraphics [width=0.7\textwidth]
-		{./imag/N_dependence_of_corr_beta2.00_step2400.pdf}
-		\setlength{\abovecaptionskip}{0pt}
-		\caption{{\textcolor{blue}{$N$-dependence}} of $C(t)$ is not obvious in these simulations.}
-	\end{figure}
-\end{frame}
+%\section{Size effects}
+%\begin{frame}
+%	\frametitle{{\textcolor{blue}{$c$-dependence}} of $C(t)$.}
+%	\begin{figure}
+%		\centering
+%		\includegraphics [width=0.7\textwidth]
+%		{./imag/N_dependence_of_corr_beta2.00_step2400.pdf}
+%		\setlength{\abovecaptionskip}{0pt}
+%		\caption{{\textcolor{blue}{$N$-dependence}} of $C(t)$ is not obvious in these simulations.}
+%	\end{figure}
+%\end{frame}
 
 \section{Conclusions}
 \begin{frame}
-	\frametitle{For $C(t)$:}
-    %\begin{itemize}
+	\frametitle{For $C(t)$: Test the program}
+    %\begin{itemize}  
     %	\item 
     %	%\item $\tau(\beta) \sim  \exp(\beta^2 \ln2)$ (\textbf{Sollich, Evans PRE 2003})
     %\end{itemize}	
+    	\begin{figure}
+    	\centering
+    	\includegraphics [width=0.7\textwidth]
+    	{../../N_beta_mp_blocking/imag/beta_dependence_of_corr_N9_step10000_log_blocking_and_pbc.pdf}
+    	\setlength{\abovecaptionskip}{0pt}
+    	\caption{ The relaxation of $C(t)$ for 1D East chain with blocking boundary ($N=9$) is slower than that with PBC. While, $C(500)=0.06$ in \textbf{Jaeckle1991}. We get different values $C(500) = 0.25$, Why? (Here we use $N=9$ for this blocking boundary. The result also different from that in  \textbf{Jaeckle1991}.)}
+    \end{figure}
 \end{frame}
 
 \section{Appendix}
+\begin{frame}
+	\frametitle{Concepts: Definition of the East model}
+	\begin{itemize}
+		\item There are no static interactions between spins, but there is an energy difference between the spin up and spin down states for each spin: $\Delta E= E_{1}- E_{-1}$.
+		\item The energy difference $\Delta E/T$ determines $c$ ($c$ is the equilibrium concentration of up spins at any temperature). $\Delta E$ is a constant in the East model, so the energy difference can be written as $1/T$, or $\beta$. 
+		\item $\beta$ is the ratio of energy difference $\Delta E=1$ and $k_\text{B}T=T$.
+		\item The thermodynamic state is specified by a single state variable $c$.
+		\item $c$ is also the probability that any particular spin is up.  
+		
+	\end{itemize}	
+\end{frame}
 \begin{frame}
 	\frametitle{Concepts: Facilitating set}
 	\begin{itemize}
@@ -172,8 +310,24 @@ $n_i$: occupation number of site $i$.
 	\frametitle{For $C(t)$:}
 	\begin{itemize}
 		\item $\phi(t) = \frac{\langle \delta n_i(t) \delta n_i(0)\rangle}{c(1-c)}$ (\textbf{Eisinger and Jaeckle, 1991}, where $\sigma_i =\pm 1$).
-		\item   $C(t) = \frac{\langle\delta n_i(t)\delta n_i (0)\rangle}{\langle \delta n_i(0)^2 \rangle}$. What is the difference between $C(t)$ and $\phi(t)$ ? $n_i = \sigma_i = 0 \text{ or } 1$.
+		\item   $C(t) = \frac{\langle\delta n_i(t)\delta n_i (0)\rangle}{\langle \delta n_i(0)^2 \rangle}$. What is the difference between $C(t)$ and $\phi(t)$ ?  
+		
+	    $C(t)=\phi(t)$. ($n_i = 0 \text{ or } 1$)
+		\item $C(t)$ can also be written as $\frac{P(s_i(t=1)| s_i(t=1))-c}{1-c}$.
+		
 		\item $c=\langle n_i \rangle =0.9, 0.8$ (CHECK THIS PROBLEM! ?)
+		\item At low $T$, $c$ is small (\textbf{Sollich 2003}).
+		\item For $N\to \infty$, all boundary conditions (free BC, blocking BC (\textbf{JCP, 113,8671}) and PBC) gives the \textbf{same} result of $C(t)$! (\textbf{Pitts, Young, Andersen, 2000, JCP, 113,8671})  
+	\end{itemize}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{The up-spin persistence function $P_1(t)$}
+	\begin{itemize}
+		\item In $[0,t]$, $s_{i-1}$ has been up a fraction $m$ of the time, and the evolution of $s_i$ has been that (evolution) of a single spin over time $mt$.
+		\item $P(m,t)$: The distribution of $m$ for a given $t$ by $P(m;t)$. What's does $P(m,t)$ mean? A: There are two possible answers. \textbf{(1)} Perform one MC simulation, spin $s_{i-1}$, $i =0,\cdots, N-1$,  has been up $m_i$ times. The distribution of $m_i$ is $P_\text{space}(m; t)$; \textbf{(2)} Perform $X$ times simulations, for site $i$, the spin $s_{i-1}$ have $m_x$ times up state. The distribution of $m_x$ is $P_\text{time}(m;t)$.     
+         (\textbf{Sollich 2003}).
+         \item \textbf{Question}: Is the $P_\text{time}(m;t)$ identical to $P_\text{space}(m;t)$?  Answer and prove. 
 	\end{itemize}	
 \end{frame}
 
