@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH -p amd_256
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 64
+#SBATCH -J AutoCorr
+
+## To run this script, use u 2_job_corr
+N=128
+S=10000
+srun -n 1 python3 main_corr.py -B 2.0 -N $N -S $S
