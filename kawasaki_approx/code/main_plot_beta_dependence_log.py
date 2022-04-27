@@ -49,12 +49,20 @@ def plot_multiple_corr(corr_arr,beta_list=beta_list,c_list=c_list,omega=omega,st
 # Main
 # ======
 if __name__=='__main__':
+    h = 0.04
+    omega=0.3
     import argparse
-    h = 0.08
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-H', nargs='?', const=h, type=float, default=h, \
+                        help="the step size.")
+    parser.add_argument('-W', nargs='?', const=1, type=float, default=1, \
+                        help="the number of nodes per layer.")
+    args = parser.parse_args()
+    h, omega = args.H, args.W
+
     step = 13
     beta_list = [0.40,0.85,1.39,2.0,2.2]
     c_list = [0.4,0.3,0.2,0.12,0.1]
-    omega=0.3
     # Plot
     corr0 = np.load('../data/corr_K_beta{:4.2f}_omega{:4.2f}_step{:d}_h{:4.2f}.npy'.format(beta_list[0],omega,step,h))     
     corr_arr = np.zeros((len(beta_list),corr0.shape[0]))
