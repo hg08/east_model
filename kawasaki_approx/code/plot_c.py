@@ -30,7 +30,8 @@ def plot_corr_log(beta,omega,step,h):
         bottom=True,      # ticks along the bottom edge are off
         top=True,         # ticks along the top edge are off
         labelbottom=True) # labels along the bottom edge are off
-    plt.ylim(0.00001, 1.001)
+    plt.xlim(0.01, 1000)
+    plt.ylim(0.0, 1.01)
     plt.xlabel(r"$t$")
     plt.ylabel(r"$C(t,t')$")
     plt.savefig("corr_K_beta{:4.2f}_omega{:4.2f}_step{:4.2f}_h{:4.2f}.pdf".format(beta,omega,step,h),bbox_inches = 'tight')
@@ -46,6 +47,7 @@ def plot_corr_log2(beta0,beta,step,h,t1):
     fig = plt.figure()
     plt.xscale('log')
     #plt.yscale('log')
+    plt.xlim(0.01, 1000)
     ax = fig.add_subplot(111)
     ax.plot(t*0.1, corr, "-", color="black",)
     ax.set_title(r"N=$\infty$; $\beta_0$={:4.2f}; $\beta ={:4.2f}$; $t'={:6.3f}$".format(beta0,beta,t1))
@@ -55,7 +57,7 @@ def plot_corr_log2(beta0,beta,step,h,t1):
         bottom=True,      # ticks along the bottom edge are off
         top=True,         # ticks along the top edge are off
         labelbottom=True) # labels along the bottom edge are off
-    plt.ylim(0.00001, 1.001)
+    plt.ylim(0.0, 1.001)
     plt.xlabel(r"$t$")
     plt.ylabel(r"$C(t,t')$")
     plt.savefig("corr_betastart{:4.2f}_beta{:4.2f}_step{:d}_h{:4.2f}_t1_{:4.2f}.pdf".format(beta0,beta,step,h,t1),bbox_inches = 'tight')
@@ -69,7 +71,6 @@ def plot_corr_log(beta,omega,step,h):
     corr = c_trans[t1][t1:]
     fig = plt.figure()
     plt.xscale('log')
-    #plt.yscale('log')
     ax = fig.add_subplot(111)
     ax.plot(t*h, corr, "-", color="black",)
     ax.set_title(r"N=$\infty$; $\beta_0$={:4.2f}; $\beta ={:4.2f}$; $t'={:6.3f}$".format(beta0,beta,t1*h))
@@ -79,7 +80,8 @@ def plot_corr_log(beta,omega,step,h):
         bottom=True,      # ticks along the bottom edge are off
         top=True,         # ticks along the top edge are off
         labelbottom=True) # labels along the bottom edge are off
-    plt.ylim(0.00001, 1.001)
+    plt.xlim(0.01, 1000)
+    plt.ylim(0.00, 1.001)
     plt.xlabel(r"$t$")
     plt.ylabel(r"$C(t,t')$")
     plt.savefig("corr_betastart{:4.2f}_beta{:4.2f}_t1{:4.2f}.pdf".format(beta0,beta,t1*h),bbox_inches = 'tight')
@@ -97,7 +99,6 @@ def plot_c_log(beta,omega,step,h):
     print("Corr:", c)
     x = h*np.arange(length)
     fig = plt.figure()
-    plt.xscale('log')
     ax = fig.add_subplot(111)
     ax.plot(x, c, "-", color="black",)
     ax.set_title(r"$\beta$={:4.2f}; $\omega ={:4.2f}$; step={:d};h={:4.2f}".format(beta,omega,step,h))
@@ -107,7 +108,8 @@ def plot_c_log(beta,omega,step,h):
         bottom=True,      # ticks along the bottom edge are off
         top=True,         # ticks along the top edge are off
         labelbottom=True) # labels along the bottom edge are off
-    plt.ylim(0.01, 1.00)
+    plt.ylim(0.01, 1000)
+    plt.ylim(0.00, 1.001)
     plt.xlabel(r"$t$")
     plt.ylabel(r"$C(t)$")
     plt.savefig("corr_K_beta{:4.2f}_omega{:4.2f}_step{:d}_h{:4.2f}.pdf".format(beta,omega,step,h),bbox_inches = 'tight')
@@ -120,9 +122,9 @@ def print_time(start_time):
     print("Total running time:",end-start_time)
 
 if __name__ == "__main__":
-    beta_list = [0.08,0.4,0.85,1.39,2.0,2.2]
+    beta_list = [0.4,0.85,1.39,2.2]
     step = 13
     omega = 0.3
-    h = 0.08
+    h = 0.01
     for i,beta in enumerate(beta_list):
         plot_c_log(beta,omega,step,h) 

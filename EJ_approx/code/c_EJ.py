@@ -15,22 +15,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Functions
-def plot_corr_log(beta,omega,step_exp,h=0.01):
-    c = np.load('../data/corr_EJ_beta{:4.2f}_omega{:4.2f}_step{:d}_h{:4.2f}.npy'.format(beta,omega,step_exp,h))
+def plot_corr_log(beta,step_exp,h=0.01):
+    c = np.load('../data/corr_EJ_beta{:4.2f}_step{:d}_h{:4.2f}.npy'.format(beta,step_exp,h))
     #print("C=",c)
     length = c.shape[0]
     t = np.array([x for x in range(length)])
     fig = plt.figure()
-    #plt.xscale('log')
+    plt.xscale('log')
     #plt.yscale('log')
     ax = fig.add_subplot(111)
     ax.plot(t*h, c, "-", color="black",)
-    ax.set_title(r"$\beta$={:4.2f}; $\omega ={:4.2f}$".format(beta,omega))
-    plt.ylim(0.01, 1.0)
-    plt.xlim(0.1, 3000)
+    ax.set_title(r"$\beta$={:4.2f}$".format(beta))
+    plt.ylim(0.0, 1.0)
+    plt.xlim(0.01, 1000)
     plt.xlabel(r"$t$")
     plt.ylabel(r"$C(t)$")
-    plt.savefig("../imag/corr_EJ_beta{:4.2f}_omega{:4.2f}_step{:d}_h{:4.2f}.pdf".format(beta,omega,step_exp,h),bbox_inches = 'tight')
+    plt.savefig("../imag/corr_EJ_beta{:4.2f}_step{:d}_h{:4.2f}.pdf".format(beta,step_exp,h),bbox_inches = 'tight')
 
 def print_time(start_time):
     import datetime
@@ -45,31 +45,27 @@ if __name__ == "__main__":
     start = datetime.datetime.now()
 
     # Parameters and initial conditions.
-    h = 0.04
-    omega=0.3
+    h = 0.01
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-H', nargs='?', const=h, type=float, default=h, \
                         help="the step size.")
-    parser.add_argument('-W', nargs='?', const=1, type=float, default=1, \
-                        help="the number of nodes per layer.")
     args = parser.parse_args()
-    h, omega = args.H, args.W
+    h = args.H
 
     h_squard = h ** 2
     # Gang Notes: omega=0.3 (or 0.5) is a template value I chosen. How to calcualte omega is still a question.
     step_exp = 13
     n_tot = 2**step_exp
 
-    beta_list = [-2.2, -1.39, -0.85, -0.4, 0.08, 0.40, 0.85, 1.39, 2.2]
+    #beta_list = [-2.2, -1.39, -0.85, -0.4, 0.08, 0.40, 0.85, 1.39, 2.2]
+    beta_list = [0.40, 0.85, 1.39, 2.2]
     for i, beta in enumerate(beta_list):
         mean_occ = np.exp(-beta)/(1+np.exp(-beta))
-        c = np.ones((n_tot)) * np.nan 
+        omega=mean_occ
+        c = np.ones((n_tot))  
         a2 = mean_occ * (1-mean_occ)
         # Initial conditions
-        for i in range(n_tot):  
-            c[i] = 1
-        c[0] = 1
 
         c[1] =(1-h*omega)*c[0]
         # Start to calcualte C, iteratively.  
@@ -83,16 +79,16 @@ if __name__ == "__main__":
             c[n+1] = dc + dc2
 
         print("c:",c)
-        filename_c = "../data/corr_EJ_beta{:4.2f}_omega{:4.2f}_step{:d}_h{:4.2f}.dat".format(beta,omega,step_exp,h)
+        filename_c = "../data/corr_EJ_beta{:4.2f}_step{:d}_h{:4.2f}.dat".format(beta,step_exp,h)
         with open(filename_c, 'w') as f: # able to append data to file
             for s in range(n_tot):
                 f.write(" ".join([str(s*h),str(c[s]),'\n'])) 
             f.close() # You can add this but it is not mandatory
         #Save the correlation function C(t) 
-        np.save('../data/corr_EJ_beta{:4.2f}_omega{:4.2f}_step{:d}_h{:4.2f}.npy'.format(beta,omega,step_exp,h),c)
+        np.save('../data/corr_EJ_beta{:4.2f}_step{:d}_h{:4.2f}.npy'.format(beta,step_exp,h),c)
 
         #Plot correlation function
-        plot_corr_log(beta,omega,step_exp,h=h)
+        plot_corr_log(beta,step_exp,h=h)
 
     # Print the total time used
     end = datetime.datetime.now()
