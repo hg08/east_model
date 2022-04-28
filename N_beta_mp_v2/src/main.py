@@ -46,34 +46,65 @@ class Spin_chain_east:
  
     def update(self,beta,f_log):
         """One step, at most one node moves."""
-        for _ in range(N):
-            i = np.random.choice(N) # take one integer randomly from 0 to N-1.
-            if i < self.N-1:
-                # If the (i+1)-th node is equals to 0, then keep it.
-                if self.coord[i+1] == 0: 
-                    self.record_coord(f_log)
-                else:
-                    if self.coord[i] == 1:
-                        self.coord[i] = 0 
+        if beta > 0:
+            for _ in range(N):
+                i = np.random.choice(N) # take one integer randomly from 0 to N-1.
+                if i < self.N-1:
+                    # If the (i+1)-th node is equals to 0, then keep it.
+                    if self.coord[i+1] == 0: 
                         self.record_coord(f_log)
                     else:
-                        prob = np.random.random(1)
-                        if prob < np.exp(-beta): 
-                            self.coord[i] = 1
-                        self.record_coord(f_log)
-            else:
-                # If the (i+1)-th node is equals to 0, then keep it.
-                if self.coord[np.mod((i+1),self.N)] == 0: 
-                    self.record_coord(f_log)
+                        if self.coord[i] == 1:
+                            self.coord[i] = 0 
+                            self.record_coord(f_log)
+                        else:
+                            prob = np.random.random(1)
+                            if prob < np.exp(-beta): 
+                                self.coord[i] = 1
+                            self.record_coord(f_log)
                 else:
-                    if self.coord[i] == 1:
-                        self.coord[i] = 0 
+                    # If the (i+1)-th node is equals to 0, then keep it.
+                    if self.coord[np.mod((i+1),self.N)] == 0: 
                         self.record_coord(f_log)
                     else:
-                        prob = np.random.random(1)
-                        if prob < np.exp(-beta): 
-                            self.coord[i] = 1
+                        if self.coord[i] == 1:
+                            self.coord[i] = 0 
+                            self.record_coord(f_log)
+                        else:
+                            prob = np.random.random(1)
+                            if prob < np.exp(-beta): 
+                                self.coord[i] = 1
+                            self.record_coord(f_log)
+        # IF beta < 0
+        else:
+            for _ in range(N):
+                i = np.random.choice(N) # take one integer randomly from 0 to N-1.
+                if i < self.N-1:
+                    # If the (i+1)-th node is equals to 0, then keep it.
+                    if self.coord[i+1] == 0: 
                         self.record_coord(f_log)
+                    else:
+                        if self.coord[i] == 1:
+                            prob = np.random.random(1)
+                            if prob < np.exp(beta): 
+                                self.coord[i] = 0 
+                            self.record_coord(f_log)
+                        else:
+                            self.coord[i] = 1
+                            self.record_coord(f_log)
+                else:
+                    # If the (i+1)-th node is equals to 0, then keep it.
+                    if self.coord[np.mod((i+1),self.N)] == 0: 
+                        self.record_coord(f_log)
+                    else:
+                        if self.coord[i] == 1:
+                            prob = np.random.random(1)
+                            if prob < np.exp(beta): 
+                                self.coord[i] = 0 
+                            self.record_coord(f_log)
+                        else:
+                            self.coord[i] = 1
+                            self.record_coord(f_log)
 
     def record_coord(self, f_log):
         string_list = ["%i" % value for value in self.coord]
@@ -130,7 +161,11 @@ if __name__=='__main__':
     #================================================ 
     #Use Multiprocessing to run MC on multiple cores
     #================================================ 
-    tot_steps = int(Nstep*(1+beta)**2) # We have let the tot_step depends on beta !!
+    if beta > 0:
+        tot_steps = int(Nstep*(1+beta)**2) # We have let the tot_step depends on beta !!
+    else:
+        tot_steps = int(Nstep*(1-beta)**2) # We have let the tot_step depends on beta !!
+
     rate = 0.8
     param_tuple = [(N,tot_steps,beta,i,Nstep,rate) for i in range(num_cores)]
 

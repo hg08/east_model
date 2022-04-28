@@ -42,7 +42,7 @@ def plot_multiple_corr(corr_arr,beta_list=beta_list,c_list=c_list,steps=step,h=0
     plt.legend(loc="lower left")
     plt.xlabel("t")
     plt.ylabel(r"$C(t)$")
-    ax.set_title(r"Eisinger-Jaeckle Approx:$h=${:4.2f}.".format(omega,h))
+    ax.set_title(r"Eisinger-Jaeckle Approx:$h=${:4.2f}.".format(h))
     plt.savefig("../imag/beta_dependence_of_corr_step{:d}_h{:4.2f}_log.pdf".format(step,h),format='pdf')
     plt.savefig("../imag/beta_dependence_of_corr_step{:d}_h{:4.2f}_log.png".format(step,h),format='png')
 

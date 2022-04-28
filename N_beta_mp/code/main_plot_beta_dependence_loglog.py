@@ -49,6 +49,33 @@ def plot_multiple_corr(corr_arr,init,beta_list=beta_list,c_list=c_list,N=N,steps
     #
     plt.savefig("../imag/beta_dependence_of_corr_N{:d}_step{:d}_loglog.pdf".format(N,tot_steps),format='pdf')
 
+def plot_compare_multiple_corr(corr_arr,corr1_arr,init,beta_list=beta_list,c_list=c_list,N=N,steps=tot_steps):
+    #1
+    max_index = calc_max_index(N,steps)                               
+    step_list_v2 = sample_step_list(max_index)  
+    time_arr = np.array(step_list_v2)/N
+    #2
+    N2 = 256
+    max_index = calc_max_index(N2,steps)                               
+    step_list_v2 = sample_step_list(max_index)  
+    time1_arr = np.array(step_list_v2)/N2
+    fig = plt.figure()
+    ax = fig.add_subplot(111) # add_subplot() adds an axes to a figure, it returns a (subclass of a) matplotlib.axes.Axes object.
+    ax.set_ylim(0.01, 1.01)
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    for i, term in enumerate(c_list):
+        ax.plot(time_arr[1:],corr_arr[i][1:-1],label=r"$c=${}".format(term))
+        ax.plot(time1_arr[1:],corr1_arr[i][1:-1],linestyle = 'dashed',label=r"$c=${}(N={})".format(term,N2))
+    plt.legend(loc="lower left")
+    plt.xlabel("t")
+    plt.ylabel(r"$C(t)$")
+    ax.set_title("N={:d}, {:d}".format(N,N2))
+    #
+    plt.savefig("../imag/beta_dependence_of_corr_N{:d}_and_N{:d}_step{:d}_loglog.pdf".format(N,N2,tot_steps),format='pdf')
+
+
+
 # ======
 # Main
 # ======
@@ -62,8 +89,8 @@ if __name__=='__main__':
     args = parser.parse_args()
     N,tot_steps = args.N,args.S
     
-    beta_list = [0.05,0.85,1.39,2.2]
-    c_list = [0.48,0.3,0.2,0.1]
+    beta_list = [0.40,0.85,1.39,2.2]
+    c_list = [0.4,0.3,0.2,0.1]
     skipped_steps = int(tot_steps * 0.2)
     tot_steps2 = tot_steps - skipped_steps
     # Plot
@@ -72,7 +99,14 @@ if __name__=='__main__':
     for i,term in enumerate(beta_list):
         temp = np.load('../data/mean_corr_N{:d}_beta{:3.2f}_step{:d}.npy'.format(N,term,tot_steps2))     
         corr_arr[i] = temp
+    N2 = 256
+    corr0 = np.load('../data/mean_corr_N{:d}_beta{:3.2f}_step{:d}.npy'.format(N2,beta_list[0],tot_steps2))     
+    corr1_arr = np.zeros((len(beta_list),corr0.shape[0]))
+    for i,term in enumerate(beta_list):
+        temp = np.load('../data/mean_corr_N{:d}_beta{:3.2f}_step{:d}.npy'.format(N2,term,tot_steps2))     
+        corr1_arr[i] = temp
     plot_multiple_corr(corr_arr,init,beta_list=beta_list,c_list=c_list,N=N,steps=tot_steps2)
+    plot_compare_multiple_corr(corr_arr,corr1_arr,init,beta_list=beta_list,c_list=c_list,N=N,steps=tot_steps2)
 
     #Main 
     print("The computer has " + str(num_cores) + " cores.")

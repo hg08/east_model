@@ -206,7 +206,7 @@ Therefore, the difference between ours and Eisinger-Jackle1991's simulation resu
 		\centering
 		\includegraphics [width=0.7\textwidth] {./imag/beta_dependence_of_corr_N128_step10000_transparent_p2-p8.pdf}
 		\setlength{\abovecaptionskip}{0pt}
-		\caption{$C(t)$ for $c=0.2$({\textcolor{red}{red}}), $c=0.4$({\textcolor{green}{green}}), $c=0.6$ ({\textcolor{orange}{orange}}) and $c=0.8$ ({\textcolor{blue}{blue}?})  in our simulations  are agree with the simulation results in \textbf{Pitts, Young and Andersen,2000}.}
+		\caption{$C(t)$ for $c=0.2$({\textcolor{red}{red}}), $c=0.4$({\textcolor{green}{green}}), $c=0.6$ ({\textcolor{orange}{orange}}) and $c=0.8$ ({\textcolor{blue}{blue}})  in our simulations  are agree with the simulation results in \textbf{Pitts, Young and Andersen,2000}.}
 	\end{figure}
 \end{frame}
 
@@ -472,12 +472,130 @@ M^\text{irr}(t)=\sum_n a_n(c) [C(t)]^n.
 \end{alignat}
 Some approximations:
 \begin{itemize}
-	\item  $M^\text{irr}_\text{K}(t) = c(1-c) [C(t)]^2$ (\textbf{Kawasaki1995})
-	\item  $M^\text{irr}_\text{EJ}(t) = c(1-c) C(t) $ (\textbf{Eisinger and Jaeckle 1993} )
+	\item  $M^\text{irr}_\text{K}(t) = c(1-c) [C(t)]^2$ (\textbf{Kawasaki1995}) [\textbf{PROBLEM5:} This equation is not consistent in dimension. Check and give the correct form! ] 
+	\item  $M^\text{irr}_\text{EJ}(t) = c(1-c) C(t) $ (\textbf{Eisinger and Jaeckle 1993} ) [\textbf{PROBLEM5':} This equation is not consistent in dimension. Check and give the correct form! ] 
 	\item diagrammatic representations of the irreducible memory function $\to$ obtained the irreducible memory kernel from a set of irreducible diagrams: $M^\text{irr} = c(1-c) C(t)$ for $(c< 0.5)$ (\textbf{Pitts, Young, Andersen, J. Chem. Phys. 2000, 113, 8671})
 	 (\textbf{Pitts and Andersen, 2001})
 	 \item A matrix formalism defined in the complete dynamic phase space (\textbf{Wu, Cao, J. Phys. Chem. B 2004, 108, 6796}).% (inspired by Pitts and Andersen).
 \end{itemize}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{3 (2) Theoretical object: to derive an equation of $C(t)$ (kinetic theory of $C(t)$)}
+	{\textbf{Problem 3}}: Derive the dynamical Eq. of $C(t)$
+	\begin{alignat}{3}
+		\frac{dC(t)}{dt} + \omega C(t) + \omega^{-1} \int_0^t d\tau M^\text{irr}(t-\tau) \frac{dC(\tau)}{d\tau} = 0,
+		\label{C_dynamics}
+	\end{alignat}
+	where $\omega = k(0)$, $k(t) = -\frac{dC(t)}{dt}$, $M^\text{irr}$ is irreducible memory function. 
+	
+	{\textbf{Solution}}:  (Ref. Pitts2000, JCP,113, 8671) From
+	\begin{alignat}{3}
+		C(z) = \frac{1}{ z+ \omega + M(z)}; M(z) = - \frac{M^{irr}(z)} {1 + \omega^{-1}M^{irr}(z)},
+		\label{C_z}
+	\end{alignat}
+	One obtain $C(z) + \frac{1}{\omega} (zC(z)-C(t=0)) + \frac{1}{\omega^2}M^{irr}(z)(zC(z)-C(t=0)) = 0$. 
+	Then perform inverse Laplace transform, one obtain Eq.\ref{C_dynamics} (The initial condition $C(t=0) = 1$ is used).
+\end{frame}
+
+\begin{frame}
+	\frametitle{3 (2b) Theoretical object: to derive an equation of $C(t)$ (kinetic theory of $C(t)$)}
+	{\textbf{Problem 3}}: Derive the dynamical Eq. of $C(t)$.
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.75\textwidth] {./imag/memory_function.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{The dynamical eqn of the$C(t)$.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{3 (3) Theoretical object: to derive an equation of $C(t)$ (kinetic theory of $C(t)$)}
+	{\textbf{Problem 4}}: Solve the dynamical Eq. of $C(t)$
+	\begin{alignat}{3}
+		\frac{dC(t)}{dt} + \omega C(t) + \omega^{-1} \int_0^t d\tau M^\text{irr}(t-\tau) \frac{dC(\tau)}{d\tau} = 0,\nonumber
+	\end{alignat}
+	where $\omega = k(0)$, $k(t) = -\frac{dC(t)}{dt}$, $M^\text{irr}$ is irreducible memory function. 
+	
+	{\textbf{Solution}}:  From
+    Kawasaki approximation:
+   We set $\omega$ in  $[0.1,0.3,0.5,0.7,0.9,1.0,2.0]$, respectively.  The calculated $C(t)$ is shown in the Fig.s.
+   	\begin{figure}
+   	\centering
+   	\includegraphics [width=0.7\textwidth] {../../kawasaki_approx/imag/beta_dependence_of_corr_omega0.20_step13_h0.04_loglog.pdf}
+   	\setlength{\abovecaptionskip}{0pt}
+   	\caption{Calculated $C(t)$ from kawasaki approximation. ($\omega = 0.2$)  }
+   \end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{3 (4) Theoretical object: to derive an equation of $C(t)$ (kinetic theory of $C(t)$)}
+		
+	{\textbf{Solution}}: From
+	Kawasaki approximation:
+	We set $\omega$ in  $[0.1,0.3,0.5,0.7,0.9,1.0,2.0]$, respectively.  The calculated $C(t)$ is shown in the Fig.s.
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.7\textwidth] {../../kawasaki_approx/imag/beta_dependence_of_corr_omega0.30_step13_h0.04_loglog.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{Calculated $C(t)$ from kawasaki approximation. ($\omega = 0.3$) }
+	\end{figure}
+\end{frame}
+\begin{frame}
+	\frametitle{3 (5) Theoretical object: to derive an equation of $C(t)$ (kinetic theory of $C(t)$)}
+	
+	{\textbf{Solution}}: From
+	Kawasaki approximation:
+	We set $\omega$ in  $[0.1,0.3,0.5,0.7,0.9,1.0,2.0]$, respectively.  The calculated $C(t)$ is shown in the Fig.s.
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.7\textwidth] {../../kawasaki_approx/imag/beta_dependence_of_corr_omega0.50_step13_h0.04_loglog.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{Calculated $C(t)$ from kawasaki approximation. ($\omega = 0.5$) }
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{3 (7) Theoretical object: to derive an equation of $C(t)$ (kinetic theory of $C(t)$)}
+	
+	{\textbf{Solution}}: From
+	Kawasaki approximation:
+	We set $\omega$ in  $[0.1,0.3,0.5,0.7,0.9,1.0,2.0]$, respectively.  The calculated $C(t)$ is shown in the Fig.s.
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.7\textwidth] {../../kawasaki_approx/imag/beta_dependence_of_corr_omega1.00_step13_h0.04_loglog.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{Calculated $C(t)$ from kawasaki approximation. ($\omega = 1.0$) }
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{3 (7) Theoretical object: Solve an equation of $C(t)$ (kinetic theory of $C(t)$):--- EJ approximation}	
+	{\textbf{Solution}}: From
+	EJ approximation:
+	We set $\omega$ in  $[0.1,0.3,0.5,0.7,0.9,1.0,2.0]$, respectively.  The calculated $C(t)$ is shown in the Fig.s.
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.7\textwidth] {../../EJ_approx/imag/beta_dependence_of_corr_omega0.30_step13_h0.04_loglog.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{Calculated $C(t)$ from EJ approximation. ($\omega = 0.3$) }
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{3 (7) Theoretical object: Solve an equation of $C(t)$ (kinetic theory of $C(t)$):--- EJ approximation}
+
+	
+	{\textbf{Solution}}: From
+	EJ approximation:
+	We set $\omega$ in  $[0.1,0.3,0.5,0.7,0.9,1.0,2.0]$, respectively.  The calculated $C(t)$ is shown in the Fig.s.
+	\begin{figure}
+		\centering
+		\includegraphics [width=0.7\textwidth] {../../EJ_approx/imag/beta_dependence_of_corr_omega1.00_step13_h0.04_loglog.pdf}
+		\setlength{\abovecaptionskip}{0pt}
+		\caption{Calculated $C(t)$ from EJ approximation. ($\omega = 1.0$) }
+	\end{figure}
 \end{frame}
 
 %\begin{frame}

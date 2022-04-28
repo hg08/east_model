@@ -274,10 +274,10 @@ if __name__=='__main__':
     
     max_index = calc_max_index(N,tot_steps2)                               
     step_list_v2 = sample_step_list(max_index)  
-    for init in range(num_cores):
-        #print("corr2")
-        corr = np.load('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta,init,tot_steps2))     
-        plot_corr(corr,init,step_list_v2,beta=beta,N=N)
+    #IF YOU WANT TO PLOT FOR EACH CORE, USE THE FOLLOWING 3 LINES
+    #for init in range(num_cores):
+    #    corr = np.load('../data/corr_N{:d}_beta{:4.2f}_init{:d}_step{:d}.npy'.format(N,beta,init,tot_steps2))     
+    #    plot_corr(corr,init,step_list_v2,beta=beta,N=N)
 
     #Main MC simulations DONE
     print("The computer has " + str(num_cores) + " cores.")
